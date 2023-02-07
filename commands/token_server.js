@@ -7,6 +7,11 @@ const CLIENT_ID = 'abc_web@openbank.stone.com.br'
 const API_URL = 'https://api.openbank.stone.com.br'
 const FILE_NAME = '/tmp/stone_api_js_credentials.json'
 
+const handleRequestError = (error) => {
+    console.log('   -> error', error.response.status, JSON.stringify(error.response.data))
+    return null
+}
+
 const generateToken = async (accessToken, refreshToken, deviceId, platformId) => {
     console.log('  -> requesting token')
     const payload = {
@@ -20,11 +25,19 @@ const generateToken = async (accessToken, refreshToken, deviceId, platformId) =>
             authorization: `Bearer ${accessToken}`,
             'content-type': 'application/json',
             'device-generated-id': deviceId,
-            'platform-id': platformId
+            'platform-id': platformId,
+            authority: 'api.openbank.stone.com.br',
+            origin: 'https://conta.stone.com.br',
+            referer: 'https://conta.stone.com.br/',
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         }
     }
 
-    const result = await axios.post(API_URL + '/api/v1/token', payload, config)
+    const result = await axios.post(API_URL + '/api/v1/token', payload, config).catch(handleRequestError)
+
+    if (!result) {
+        return null
+    }
 
     console.log('  -> token returned')
 
@@ -49,7 +62,7 @@ const retrieveToken = () => {
     }
 }
 
-const scheduledWorker = () => {
+const scheduledWorker = async () => {
     console.log('check for token')
 
     const loadedToken = retrieveToken()
@@ -64,8 +77,11 @@ const scheduledWorker = () => {
 
     if (decoded.exp <= compareDate) {
         console.log(' -> token not valid')
-        const newToken = generateToken(loadedToken.accessToken, loadedToken.refreshToken, loadedToken.deviceId, loadedToken.platformId)
-        persistToken(newToken.accessToken, newToken.refreshToken, deviceId, platformId)
+        const newToken = await generateToken(loadedToken.accessToken, loadedToken.refreshToken, loadedToken.deviceId, loadedToken.platformId)
+
+        if (newToken) {
+            persistToken(newToken.accessToken, newToken.refreshToken, newToken.deviceId, newToken.platformId)
+        }
 
     } else {
         console.log(' -> token still valid')
