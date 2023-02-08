@@ -20,6 +20,7 @@ const deviceId = getLocalStorage('device-generated-id')
 const platformId = getLocalStorage('platform-id')
 const accessToken = getCookie('token')
 const refreshToken = getCookie('refreshToken')
+const accountId = getCookie('accountId')
 
-console.log(JSON.stringify({deviceId, platformId, accessToken, refreshToken}))
+console.log(JSON.stringify({accountId, deviceId, platformId, accessToken, refreshToken}))
 ```
