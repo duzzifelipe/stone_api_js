@@ -50,8 +50,10 @@ const generateToken = async (accessToken, refreshToken, deviceId, platformId) =>
 }
 
 const persistToken = (accessToken, refreshToken, deviceId, platformId) => {
-    const payload = JSON.stringify({ accessToken, refreshToken, deviceId, platformId })
-    fs.writeFileSync(FILE_NAME, payload)
+    if (accessToken && refreshToken && deviceId && platformId) {
+        const payload = JSON.stringify({ accessToken, refreshToken, deviceId, platformId })
+        fs.writeFileSync(FILE_NAME, payload)
+    }
 }
 
 const retrieveToken = () => {
