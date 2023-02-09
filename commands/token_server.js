@@ -50,7 +50,7 @@ const scheduledWorker = async () => {
         const newToken = await generateToken(loadedConfig.refreshToken)
 
         if (newToken) {
-            writeConfig({...loadedConfig, newToken})
+            writeConfig({...loadedConfig, ...newToken})
         }
 
     } else {
