@@ -1,6 +1,5 @@
 const cron = require('node-cron');
 const jwt = require('jsonwebtoken')
-const fs = require('fs');
 const { post } = require('../rest');
 const { writeConfig, loadConfig } = require('./set_config');
 
@@ -48,7 +47,7 @@ const scheduledWorker = async () => {
 
     if (decoded.exp <= compareDate) {
         console.log(' -> token not valid')
-        const newToken = await generateToken(loadedConfig)
+        const newToken = await generateToken(loadedConfig.refreshToken)
 
         if (newToken) {
             writeConfig({...loadedConfig, newToken})

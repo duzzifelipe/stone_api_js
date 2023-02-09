@@ -1,3 +1,4 @@
+const fs = require('fs')
 const FILE_NAME = '/tmp/stone_api_js_credentials.json'
 
 module.exports = {

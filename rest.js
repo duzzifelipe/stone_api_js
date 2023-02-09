@@ -21,8 +21,6 @@ const restConfig = (extraHeaders) => {
         headers = { ...headers, ...extraHeaders }
     }
 
-    console.log(headers)
-
     return { headers }
 }
 
