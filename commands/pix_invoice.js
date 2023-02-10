@@ -39,7 +39,8 @@ const createInvoice = async (amount, key) => {
 
 const verifyInvoice = async (id) => {
     const result = await get(`/api/v1/pix_payment_invoices/${id}`)
-    console.log(result.response.data)
+
+    return { is_paid: result.data.status === 'PAID' }
 }
 
 module.exports = {
