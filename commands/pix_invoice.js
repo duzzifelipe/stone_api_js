@@ -34,6 +34,7 @@ const createInvoice = async (amount, key) => {
     return {
         id: result.data.id,
         address: result.data.qr_code_content,
+        transactionId
     }
 }
 
