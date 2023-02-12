@@ -1,13 +1,6 @@
+const { randomString } = require("../helpers")
 const { post, get } = require("../rest")
 const { loadConfig } = require("./set_config")
-
-const RANDOM_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-const randomString = (length) => {
-    var result = '';
-    for (var i = length; i > 0; --i) result += RANDOM_CHARS[Math.floor(Math.random() * RANDOM_CHARS.length)];
-    return result;
-}
 
 const handleRequestError = (error) => {
     console.log(error.response.status, JSON.stringify(error.response.data))
