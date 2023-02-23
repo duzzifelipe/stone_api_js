@@ -14,6 +14,6 @@ config.add(new winston.transports.Console({
 
 module.exports = {
     createLogger: (namespace) => {
-        return config.child({ namespace })
+        return config.child({ namespace: `stone_api_js:${namespace}` })
     }
 }
