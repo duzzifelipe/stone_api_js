@@ -1,14 +1,17 @@
+const jose = require('node-jose');
 const { randomString } = require("../helpers")
 const { post, get } = require("../rest")
 const { loadConfig } = require("./set_config")
-const jose = require('node-jose');
+const { createLogger } = require('../logger')
+
+const logger = createLogger('commands:pix_payment')
 
 const handleRequestError = (step, error) => {
     if (error.response.status === 403 && error.response.data.type === "srn:error:challenge_required") {
         return { challengeId: error.response.data?.challenge?.id }
 
     } else {
-        console.log(step, error.response.status, JSON.stringify(error.response.data))
+        logger.error(step, error.response.status, JSON.stringify(error.response.data))
         return null
     }
 }
@@ -84,7 +87,7 @@ const PIX_STATUSES = {
 const verifyPixPayment = async (id) => {
     const result = await get(`/api/v1/pix/outbound_pix_payments/${id}`).catch((error) => handleRequestError('verify', error))
     const status = PIX_STATUSES[result.data.status] || null
-    console.log('verifyPixPayment', id , result.data.status, status)
+    logger.info('verifyPixPayment', id , result.data.status, status)
     return status
 }
 

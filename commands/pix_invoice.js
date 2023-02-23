@@ -1,9 +1,12 @@
 const { randomString } = require("../helpers")
 const { post, get } = require("../rest")
 const { loadConfig } = require("./set_config")
+const { createLogger } = require('../logger')
+
+const logger = createLogger('commands:pix_invoice')
 
 const handleRequestError = (error) => {
-    console.log(error.response.status, JSON.stringify(error.response.data))
+    logger.error(error.response.status, JSON.stringify(error.response.data))
     return null
 }
 
